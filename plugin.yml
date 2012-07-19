@@ -3,17 +3,22 @@ version: 0.5
 main: me.hawkfalcon.mctag.MCTag
 commands:
     Tag:
-        description: Makes you it
-        usage: /tag
-        
-    Tagend:
-        description: Ends the game of tag
-        usage: /tagend
+       description: All the MCTag commands
+       usage: /tag [start|stop|tagback (allow|forbid)]
+   
 permissions: 
-    MCTag.Tag:
-        description: Allows use of /tag
+    MCTag.start:
+        description: Allows use of /tag start
         default: OP
         
-    MCTag.Tagend:
-        description: Allows use of /tagend
+    MCTag.stop:
+        description: Allows use of /tag stop
+        default: OP
+        
+    MCTag.tagbackallow:
+        description: Allows use of /tag tagback allow
+        default: OP
+        
+    MCTag.tagbackforbid:
+        description: Allows use of /tag tagback forbid
         default: OP
