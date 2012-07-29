@@ -1,11 +1,12 @@
 name: MCTag
-version: 0.5
+version: 0.6
 main: me.hawkfalcon.mctag.MCTag
 commands:
     Tag:
        description: All the MCTag commands
-       usage: /tag [start|stop|tagback (allow|forbid)]
-   
+       usage: /tag [start|stop|tagback(allow|forbid)|freezetag(on|off)]  
+       aliases: mctag 
+       
 permissions: 
     MCTag.start:
         description: Allows use of /tag start
@@ -22,3 +23,19 @@ permissions:
     MCTag.tagbackforbid:
         description: Allows use of /tag tagback forbid
         default: OP
+        
+    MCTag.it:
+        description: Allows use of /tag it
+        default: true
+        
+    MCTag.reload:
+        description: Allows use of /tag reload
+        default: OP
+        
+    MCTag.freezetagon:
+        description: Allows use of /tag freezetag on
+        default: OP
+        
+    MCTagt.freezetagoff: 
+        decription: Allows use of /freezetag off
+        defualt: OP

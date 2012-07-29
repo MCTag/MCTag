@@ -1,1 +1,6 @@
 allow_tagbacks: true
+freeze_tag: false
+diamond_amount: 1
+air_in_hand_to_tag: true
+damage_from_tagger: true
+tagger_can_teleport: false
