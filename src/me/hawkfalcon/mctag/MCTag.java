@@ -52,10 +52,10 @@ public class MCTag extends JavaPlugin implements Listener, CommandExecutor {
 			// Failed to submit the stats :-(
 		}
 		gameOn = false;
-		startBool = true;
 		playerIt = null;
 		previouslyIt = null;
 		playerIsit = null;
+		startBool = true;
 	}
 
 	public void onDisable() {
@@ -83,10 +83,16 @@ public class MCTag extends JavaPlugin implements Listener, CommandExecutor {
 							boolean freeze = getConfig().getBoolean("freeze_tag");
 							if (!freeze){
 								if ((!gameOn) || (startBool)){
-									gameOn = true;
-									startBool = false;
-									getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + "A game of tag has begun!");
-									tagPlayer(player);
+									int playersonline = Arrays.asList(this.getServer().getOnlinePlayers()).size();
+									if (playersonline > 1){
+										gameOn = true;
+										startBool = false;
+										getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + "A game of tag has begun!");
+										selectPlayer();
+									}
+									else{
+										player.sendMessage(ChatColor.RED + "There must be at least 2 people online to play tag");
+									}
 								}
 								else {
 									player.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.RED + "There is already a game of tag started!");
@@ -95,16 +101,15 @@ public class MCTag extends JavaPlugin implements Listener, CommandExecutor {
 
 							else if (freeze) {
 								if ((!gameOn) || (startBool)){
-									gameOn = true;
-									startBool = false;
 									int playersonline = Arrays.asList(this.getServer().getOnlinePlayers()).size();
 									if (playersonline > 2){
-
+										gameOn = true;
+										startBool = false;
 										getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + "A game of freeze tag has begun!");
 										selectPlayer();
 									}
 									else {
-										player.sendMessage(ChatColor.RED + "There must be at leaset 3 people online to play freeze tag");
+										player.sendMessage(ChatColor.RED + "There must be at least 3 people online to play freeze tag");
 									}
 								}
 								else {
@@ -249,6 +254,9 @@ public class MCTag extends JavaPlugin implements Listener, CommandExecutor {
 						}
 						return true;
 					}
+					else {
+						player.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.AQUA + commands);
+					}
 				}
 				else {
 					player.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.AQUA + commands);
@@ -267,7 +275,7 @@ public class MCTag extends JavaPlugin implements Listener, CommandExecutor {
 	//Private Methods
 
 	private void selectPlayer(){
-		List<Player> players  = Arrays.asList(this.getServer().getOnlinePlayers());
+		List<Player> players = Arrays.asList(this.getServer().getOnlinePlayers());
 		int theSize = players.size();
 		Random random = new Random();
 		Player theNextPlayer = players.get(random.nextInt(theSize));
