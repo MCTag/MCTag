@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -12,18 +13,21 @@ import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
-public class Events{
-	MCTag mctag = new MCTag();
-	TheMethods method = new TheMethods();
+public class Events implements Listener{
+		public MCTag plugin;
+		public Events(MCTag m) {
+	    this.plugin = m;
+	    }	
+		TheMethods method = new TheMethods(null);
 
 	//stop teleporting
 	@EventHandler
 	public void onTeleport(PlayerTeleportEvent event) {
-		if (mctag.gameOn){
+		if (plugin.gameOn){
 			//check config
-			boolean notele = mctag.getConfig().getBoolean("tagger_can_teleport");
+			boolean notele = plugin.getConfig().getBoolean("tagger_can_teleport");
 			if  (!notele){
-				if (event.getPlayer().getName().equals(mctag.playerIt)) {
+				if (event.getPlayer().getName().equals(plugin.playerIt)) {
 					event.setCancelled(true);
 					Player tele = (Player) event.getPlayer();
 					tele.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.RED + "You can't teleport while you are it!");
@@ -35,34 +39,34 @@ public class Events{
 	@EventHandler
 	public void onDisconnect(PlayerQuitEvent event) {
 		//if its the player who is it
-		if (event.getPlayer().getName().equals(mctag.playerIt)) {
-			boolean arena_mode = mctag.getConfig().getBoolean("arena_mode");
+		if (event.getPlayer().getName().equals(plugin.playerIt)) {
+			boolean arena_mode = plugin.getConfig().getBoolean("arena_mode");
 			//arena
 			if (arena_mode) {
-				for (Player p : mctag.playersInGame) {
-					p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + mctag.playerIt + " has left, randomly selecting next person to be it!");
+				for (Player p : plugin.playersInGame) {
+					p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + plugin.playerIt + " has left, randomly selecting next person to be it!");
 				}
 				method.selectPlayerFromArena();
 
 			}
 			//not arena
 			else {
-				mctag.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + mctag.playerIt + " has left, randomly selecting next person to be it!");
+				plugin.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + plugin.playerIt + " has left, randomly selecting next person to be it!");
 				method.selectPlayer();
 			}
 		}
-		else if (mctag.playersInGame.contains(event.getPlayer())){
-			mctag.playersInGame.remove(event.getPlayer());
+		else if (plugin.playersInGame.contains(event.getPlayer())){
+			plugin.playersInGame.remove(event.getPlayer());
 		}
 	}
 	//freeze player
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true) 
 	public void freezePlayers(PlayerMoveEvent event){
-		boolean freeze = mctag.getConfig().getBoolean("freeze_tag");
+		boolean freeze = plugin.getConfig().getBoolean("freeze_tag");
 		//is it freeze tag?
 		if (freeze){
 			//get frozen players
-			if (mctag.frozenPlayers.contains(event.getPlayer().getName())){
+			if (plugin.frozenPlayers.contains(event.getPlayer().getName())){
 				Block fromBlock = event.getFrom().getBlock();
 				Block toBlock = event.getTo().getBlock();
 				if (fromBlock.equals(toBlock)) {
@@ -78,8 +82,8 @@ public class Events{
 	//no commands
 	@EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true) 
 	public void nocommands(PlayerCommandPreprocessEvent event){
-		boolean commands = mctag.getConfig().getBoolean("commands_in_arena");
-		boolean arena_mode = mctag.getConfig().getBoolean("arena_mode");
+		boolean commands = plugin.getConfig().getBoolean("commands_in_arena");
+		boolean arena_mode = plugin.getConfig().getBoolean("arena_mode");
 		//check config?
 		if (!commands){
 			if (arena_mode) {
@@ -94,7 +98,7 @@ public class Events{
 	@EventHandler
 	public void onBlockPlace(BlockPlaceEvent event) {
 		String player = event.getPlayer().getName();
-		if (mctag.frozenPlayers.contains(player)) {
+		if (plugin.frozenPlayers.contains(player)) {
 			event.setCancelled(true);
 		}
 	}
@@ -102,7 +106,7 @@ public class Events{
 	@EventHandler
 	public void onBlockBreak(BlockBreakEvent event) {
 		String player = event.getPlayer().getName();
-		if (mctag.frozenPlayers.contains(player)) {
+		if (plugin.frozenPlayers.contains(player)) {
 			event.setCancelled(true);
 		}
 	}
