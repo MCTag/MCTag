@@ -1,5 +1,5 @@
 name: MCTag
-version: 0.6
+version: 1.0
 main: me.hawkfalcon.mctag.MCTag
 commands:
     Tag:
@@ -36,6 +36,18 @@ permissions:
         description: Allows use of /tag freezetag on
         default: OP
         
-    MCTagt.freezetagoff: 
-        decription: Allows use of /freezetag off
+    MCTag.freezetagoff: 
+        decription: Allows use of /tag freezetag off
+        defualt: OP
+        
+    MCTag.join: 
+        decription: Allows use of /tag join
+        defualt: true
+        
+    MCTag.leave: 
+        decription: Allows use of /tag leave
+        defualt: true
+        
+    MCTag.setspawn: 
+        decription: Allows use of /tag setspawn
         defualt: OP

@@ -4,3 +4,6 @@ diamond_amount: 1
 air_in_hand_to_tag: true
 damage_from_tagger: true
 tagger_can_teleport: false
+arena_mode: false
+spawn_location: world|0|0|0
+commands_in_arena: false
