@@ -14,6 +14,8 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class Events{
 	MCTag mctag = new MCTag();
+	TheMethods method = new TheMethods();
+
 	//stop teleporting
 	@EventHandler
 	public void onTeleport(PlayerTeleportEvent event) {
@@ -40,13 +42,13 @@ public class Events{
 				for (Player p : mctag.playersInGame) {
 					p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + mctag.playerIt + " has left, randomly selecting next person to be it!");
 				}
-				mctag.method.selectPlayerFromArena();
+				method.selectPlayerFromArena();
 
 			}
 			//not arena
 			else {
 				mctag.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + mctag.playerIt + " has left, randomly selecting next person to be it!");
-				mctag.method.selectPlayer();
+				method.selectPlayer();
 			}
 		}
 		else if (mctag.playersInGame.contains(event.getPlayer())){

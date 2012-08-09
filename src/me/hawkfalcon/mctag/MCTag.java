@@ -15,7 +15,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 public class MCTag extends JavaPlugin implements Listener {
 
-	TheMethods method = new TheMethods();
 	Set<String> frozenPlayers = new HashSet<String>();
 	List<Player> playersInGame = new ArrayList<Player>();
 	String playerIt = null;

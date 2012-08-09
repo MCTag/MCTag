@@ -11,6 +11,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Tag{
 	MCTag mctag = new MCTag();
+	TheMethods method = new TheMethods();
 	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onTag(EntityDamageByEntityEvent event) {
 		if ((event.getEntity() instanceof Player && event.getDamager() instanceof Player)) {
@@ -27,7 +28,7 @@ public class Tag{
 					if (freeze == false) {
 						//tagbacks on
 						if (tagback == true) {
-							mctag.method.tagPlayer(player);
+							method.tagPlayer(player);
 							if (tag_damage == false) {
 								event.setCancelled(true);
 							}						}
@@ -43,7 +44,7 @@ public class Tag{
 							}
 							//normal
 							else {
-								mctag.method.tagPlayer(player);
+								method.tagPlayer(player);
 								mctag.previouslyIt = damager.getName();
 								if (tag_damage == false) {
 									event.setCancelled(true);
@@ -57,7 +58,7 @@ public class Tag{
 					else if (freeze == true){
 						//player is not already frozen
 						if (!mctag.frozenPlayers.contains(player.getName())){
-							mctag.method.freezePlayer(player);
+							method.freezePlayer(player);
 							int theAmount = Arrays.asList(mctag.getServer().getOnlinePlayers()).size();
 							int playersingame = mctag.playersInGame.size();
 							int playersFrozen = mctag.frozenPlayers.size();
@@ -69,8 +70,8 @@ public class Tag{
 									mctag.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.GOLD + mctag.playerIt + " has won the game of freeze tag!");
 									mctag.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + "Randomly selecting next player to be it!");
 									mctag.frozenPlayers.clear();
-									mctag.method.rewardPlayer(damager);
-									mctag.method.selectPlayer();
+									method.rewardPlayer(damager);
+									method.selectPlayer();
 								}
 								else {
 									//everyones frozen
@@ -79,8 +80,8 @@ public class Tag{
 											p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.GOLD + mctag.playerIt + " has won the game of freeze tag!");
 											p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + "Randomly selecting next player to be it!");
 											mctag.frozenPlayers.clear();
-											mctag.method.rewardPlayer(damager);
-											mctag.method.selectPlayerFromArena();
+										    method.rewardPlayer(damager);
+											method.selectPlayerFromArena();
 										}
 									}
 

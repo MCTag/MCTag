@@ -5,11 +5,14 @@ import java.util.Arrays;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class Commands{
+public class Commands implements CommandExecutor{
 	MCTag mctag = new MCTag();
+	TheMethods method = new TheMethods();
+
 	//commands
 	public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
 		Player player = (Player) sender;
@@ -44,7 +47,7 @@ public class Commands{
 											mctag.gameOn = true;
 											mctag.startBool = false;
 											mctag.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + "A game of tag has begun!");
-											mctag.method.selectPlayer();
+											method.selectPlayer();
 										}
 										//1 player
 										else {
@@ -59,8 +62,8 @@ public class Commands{
 											for (Player p : mctag.playersInGame) {
 												p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + "A game of tag has begun! Type /tag join to join the game");
 											}
-											mctag.method.tagPlayer(player);
-											mctag.method.joinPlayer(player);
+											method.tagPlayer(player);
+											method.joinPlayer(player);
 									}
 								}
 								//game on already
@@ -79,7 +82,7 @@ public class Commands{
 											mctag.gameOn = true;
 											mctag.startBool = false;
 											mctag.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + "A game of freeze tag has begun!");
-											mctag.method.selectPlayer();
+											method.selectPlayer();
 										}
 										//2- players
 										else {
@@ -93,8 +96,8 @@ public class Commands{
 											for (Player p : mctag.playersInGame) {
 												p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + "A game of freeze tag has begun!");
 											}
-											mctag.method.tagPlayer(player);
-											mctag.method.joinPlayer(player);
+											method.tagPlayer(player);
+											method.joinPlayer(player);
 									}
 								}
 								//game already on
@@ -177,7 +180,7 @@ public class Commands{
 				//join game
 				if (args[0].equalsIgnoreCase("join")){
 					if (sender.hasPermission("MCTag.join")) {
-						mctag.method.joinPlayer(player);
+						method.joinPlayer(player);
 					}
 					//no perms
 					else {
