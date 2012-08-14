@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -16,7 +17,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MCTag extends JavaPlugin implements Listener {
-
+    Logger log;
 	Set<String> frozenPlayers = new HashSet<String>();
 	List<Player> playersInGame = new ArrayList<Player>();
 	String playerIt = null;
@@ -26,19 +27,14 @@ public class MCTag extends JavaPlugin implements Listener {
 	boolean startBool = true;
 	String commands = "Commands: \n /tag <join|leave> - join or leave the game \n /tag <start|stop> - start and stop game \n /tag it - view tagged player \n /tag tagback <allow|forbid> - allow and forbid tagback \n /tag freezetag <on|off> - turn freeze tag on and off \n /tag reload - reloads the config \n /tag setspawn - set arena spawnpoint";
 	public FileConfiguration config;
-	public CommandExecutor Commands = new Commands(this);
-	public Listener Events = new Events(this);
-	public Listener TheMethods = new Events(this);
-	public Listener Tag = new Tag(this);
-
-
-
+	public CommandExecutor Commands = new Commands(this, new TheMethods(this));
+	public Listener Tag = new Tag(this, new TheMethods(this));
 	
 	public void onEnable() {
-		getServer().getPluginManager().registerEvents(Events, this);
+		log = this.getLogger();
+		log.info("MCTag has been enabled");
+		getServer().getPluginManager().registerEvents(new Events(this, new TheMethods(this)), this);
 		getServer().getPluginManager().registerEvents(Tag, this);
-		getServer().getPluginManager().registerEvents(TheMethods, this);
-
 		getCommand("Tag").setExecutor(Commands);
 		final File f = new File(getDataFolder(), "config.yml");
 		if (!f.exists()){
@@ -58,6 +54,7 @@ public class MCTag extends JavaPlugin implements Listener {
 	}
 
 	public void onDisable() {
+		log.info("MCTag has been disabled");
 		gameOn = false;
 		playerIt = null;
 		previouslyIt = null;

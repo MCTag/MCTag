@@ -11,13 +11,14 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Tag implements Listener{
-	public MCTag plugin;
-	public Tag(MCTag m) {
+	private MCTag plugin;
+	private TheMethods method;
+	public Tag(MCTag m, TheMethods me) {
     this.plugin = m;
-    }	
-	TheMethods method = new TheMethods();
-
-	@EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
+    this.method = me;
+    }
+	@EventHandler
+	(priority = EventPriority.MONITOR, ignoreCancelled = false)
 	public void onTag(EntityDamageByEntityEvent event) {
 		if ((event.getEntity() instanceof Player && event.getDamager() instanceof Player)) {
 			Player damager = (Player) event.getDamager();
@@ -28,13 +29,13 @@ public class Tag implements Listener{
 			boolean tag_damage = plugin.getConfig().getBoolean("damage_from_tagger");
 			if (damager.getName().equals(plugin.playerIt)) {
 				//check if player holds air or air mode is off
-				if ((damager.getItemInHand().getType() == Material.AIR) || (airInHand == false)){
+				if ((damager.getItemInHand().getType() == Material.AIR) || (!airInHand)){
 					//normal tag
-					if (freeze == false) {
+					if (!freeze) {
 						//tagbacks on
-						if (tagback == true) {
+						if (tagback) {
 							method.tagPlayer(player);
-							if (tag_damage == false) {
+							if (!tag_damage) {
 								event.setCancelled(true);
 							}						}
 
@@ -43,7 +44,7 @@ public class Tag implements Listener{
 							//previouslyit
 							if (player.getName().equals(plugin.previouslyIt)) {
 								damager.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.RED + "No tagbacks!");
-								if (tag_damage == false) {
+								if (!tag_damage) {
 									event.setCancelled(true);
 								}
 							}
@@ -51,7 +52,7 @@ public class Tag implements Listener{
 							else {
 								method.tagPlayer(player);
 								plugin.previouslyIt = damager.getName();
-								if (tag_damage == false) {
+								if (!tag_damage) {
 									event.setCancelled(true);
 								}
 
@@ -60,7 +61,7 @@ public class Tag implements Listener{
 					}
 
 					//freezetag
-					else if (freeze == true){
+					else if (freeze){
 						//player is not already frozen
 						if (!plugin.frozenPlayers.contains(player.getName())){
 							method.freezePlayer(player);
@@ -91,7 +92,7 @@ public class Tag implements Listener{
 									}
 
 								}
-								if (tag_damage == false) {
+								if (!tag_damage) {
 									event.setCancelled(true);
 								}
 							}
@@ -117,24 +118,25 @@ public class Tag implements Listener{
 							}
 							//arena mode
 							else {
+								if (plugin.playersInGame.contains(damager)){
 								for (Player p : plugin.playersInGame) {
-									if (plugin.playersInGame.contains(damager)){
 									p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.DARK_GREEN + player.getName() + " is unfrozen!");
-									plugin.frozenPlayers.remove(player.getName());
 									}
+									plugin.frozenPlayers.remove(player.getName());
+
 								}
 							}
-							if (tag_damage == false) {
+							if (!tag_damage) {
 								event.setCancelled(true);
 							}
 						}
 					}
 					//if anything goes wrong
 					else {
-						if (airInHand == true){
+						if (airInHand){
 							damager.sendMessage(ChatColor.RED + "You must have air in your hand to tag somebody");
 						}
-						if (tag_damage == false) {
+						if (!tag_damage) {
 							event.setCancelled(true);
 						}
 

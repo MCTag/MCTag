@@ -14,12 +14,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public class TheMethods{
-	public MCTag plugin;
+	private MCTag plugin;
 	public TheMethods(MCTag m) {
     this.plugin = m;
     }
-
-	//public Methods
 	//selects player randomly
 	public void selectPlayer(){
 		List<Player> players = Arrays.asList(plugin.getServer().getOnlinePlayers());
@@ -53,7 +51,7 @@ public class TheMethods{
 	//rewards diamonds
 	public void rewardPlayer(Player player) {
 		boolean arena_mode = plugin.getConfig().getBoolean("arena_mode");
-		int amount = plugin.getConfig().getInt("diamond_amount");
+		int amount = this.plugin.getConfig().getInt("diamond_amount");
 		if (!arena_mode) {
 			player.getInventory().addItem(new ItemStack(Material.DIAMOND, amount));
 			player.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.GOLD + "You have recieved " + amount +" diamonds as a reward for winning freeze tag!");

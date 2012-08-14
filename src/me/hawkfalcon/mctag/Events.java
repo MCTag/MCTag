@@ -14,11 +14,12 @@ import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 public class Events implements Listener{
-		public MCTag plugin;
-		public Events(MCTag m) {
-	    this.plugin = m;
-	    }	
-		TheMethods method = new TheMethods(null);
+	private MCTag plugin;
+	private TheMethods method;
+	public Events(MCTag m, TheMethods me) {
+    this.plugin = m;
+    this.method = me;
+    }
 
 	//stop teleporting
 	@EventHandler
@@ -69,9 +70,6 @@ public class Events implements Listener{
 			if (plugin.frozenPlayers.contains(event.getPlayer().getName())){
 				Block fromBlock = event.getFrom().getBlock();
 				Block toBlock = event.getTo().getBlock();
-				if (fromBlock.equals(toBlock)) {
-					return;
-				}
 				if (!(fromBlock.getX() == toBlock.getX() && fromBlock.getZ() == toBlock.getZ())) {
 					event.getPlayer().teleport(fromBlock.getLocation());
 					event.setCancelled(true);
@@ -87,10 +85,11 @@ public class Events implements Listener{
 		//check config?
 		if (!commands){
 			if (arena_mode) {
+				if (plugin.playersInGame.contains(event.getPlayer())){
 				//no commands
 				event.setCancelled(true);
 				event.getPlayer().sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.RED + "You can't use commands in the arena!");
-
+				}
 			}
 		}
 	}
