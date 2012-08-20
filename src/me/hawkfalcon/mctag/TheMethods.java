@@ -13,6 +13,7 @@ import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+
 public class TheMethods{
 	private MCTag plugin;
 	public TheMethods(MCTag m) {
@@ -23,33 +24,39 @@ public class TheMethods{
 		List<Player> players = Arrays.asList(plugin.getServer().getOnlinePlayers());
 		int theSize = players.size();
 		Random random = new Random();
-		Player theNextPlayer = players.get(random.nextInt(theSize));
+		String theNextString = players.get(random.nextInt(theSize)).getName();
 		//try again
-		if (theNextPlayer == plugin.playerIsit) {
+		if (theNextString == plugin.playerIt) {
 			selectPlayer();
 		}
 		//tag player
 		else {
-			tagPlayer(theNextPlayer);
+			tagPlayer(theNextString);
 
 		}
 	}
+	public void startGameWith(String player){
+		joinPlayer(player);
+		tagPlayer(player);
+	}
 	public void selectPlayerFromArena(){
+		List<Player> players = Arrays.asList(plugin.getServer().getOnlinePlayers());
 		int theSize = plugin.playersInGame.size();
 		Random random = new Random();
-		Player theNextPlayer = plugin.playersInGame.get(random.nextInt(theSize));
+		String theNextString = players.get(random.nextInt(theSize)).getName();
 		//try again
-		if (theNextPlayer == plugin.playerIsit) {
+		if (theNextString == plugin.playerIt) {
 			selectPlayerFromArena();
 		}
 		//tag player
 		else {
-			tagPlayerFromArena(theNextPlayer);
+			tagPlayerFromArena(theNextString);
 
 		}
 	}
 	//rewards diamonds
-	public void rewardPlayer(Player player) {
+	public void rewardPlayer(String playerstring) {
+		Player player = Bukkit.getPlayer(playerstring);
 		boolean arena_mode = plugin.getConfig().getBoolean("arena_mode");
 		int amount = this.plugin.getConfig().getInt("diamond_amount");
 		if (!arena_mode) {
@@ -68,86 +75,101 @@ public class TheMethods{
 	}
 
 	//tags player
-	public void tagPlayer(Player player) {
-		plugin.playerIt = player.getName();
-		plugin.playerIsit = player;
+	public void tagPlayer(String player) {
+		plugin.playerIt = player;
+		plugin.playerIt = player;
 		boolean arena_mode = plugin.getConfig().getBoolean("arena_mode");
 		//arena mode
 		if (arena_mode){
-			for (Player p : plugin.playersInGame) {
-				p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.DARK_GREEN + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + player.getName() + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + " is now it!");
+			for (String p : plugin.playersInGame) {
+				Bukkit.getPlayer(p).sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.DARK_GREEN + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + player + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + " is now it!");
 			}
 		}
 		//not arena mode
 		else {
-			plugin.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.DARK_GREEN + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + player.getName() + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + " is now it!");
+			plugin.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.DARK_GREEN + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + player + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + " is now it!");
 		}
 		//smoke!
 		for (int i = 0; i <= 8; i++)
-			player.getWorld().playEffect(player.getLocation(), Effect.SMOKE, i);
+			Bukkit.getPlayer(player).getWorld().playEffect(Bukkit.getPlayer(player).getLocation(), Effect.SMOKE, i);
 	}
-	public void tagPlayerFromArena(Player player) {
+	public void tagPlayerFromArena(String player) {
 		if (plugin.playersInGame.contains(player)){
-			plugin.playerIt = player.getName();
-			plugin.playerIsit = player;
-			for (Player p : plugin.playersInGame) {
-				p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.DARK_GREEN + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + player.getName() + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + " is now it!");
+			plugin.playerIt = player;
+			plugin.playerIt = player;
+			for (String p : plugin.playersInGame) {
+				Bukkit.getPlayer(p).sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.DARK_GREEN + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + player + ChatColor.MAGIC + "+" + ChatColor.DARK_GREEN + " is now it!");
 			}
 			//smoke!
 			for (int i = 0; i <= 8; i++)
-				player.getWorld().playEffect(player.getLocation(), Effect.SMOKE, i);
+				Bukkit.getPlayer(player).getWorld().playEffect(Bukkit.getPlayer(player).getLocation(), Effect.SMOKE, i);
 		}
 	}
 
 	//freezes player
-	public void freezePlayer(Player player) {
+	public void freezePlayer(String player) {
 		boolean arena_mode = plugin.getConfig().getBoolean("arena_mode");
-		String frozen = player.getName();
 		//player is not already frozen
-		if (!plugin.frozenPlayers.contains(player.getName())){
+		if (!plugin.frozenPlayers.contains(player)){
+			plugin.frozenPlayers.add(player);
+			for (int i = 0; i <= 8; i++) {
+				Bukkit.getPlayer(player).getWorld().playEffect(Bukkit.getPlayer(player).getLocation(), Effect.SMOKE, i);
+			}
 			if (!arena_mode){
-				plugin.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.DARK_GREEN + player.getName() + " is now frozen!");
+				plugin.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.DARK_GREEN + player + " is now frozen!");
 			}
 			else {
-				for (Player p : plugin.playersInGame) {
-					p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.DARK_GREEN + player.getName() + " is now frozen!");
+				for (String p : plugin.playersInGame) {
+					Bukkit.getPlayer(p).sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.DARK_GREEN + player + " is now frozen!");
 				}
 			}
-			plugin.frozenPlayers.add(frozen);
-			for (int i = 0; i <= 8; i++)
-				player.getWorld().playEffect(player.getLocation(), Effect.SMOKE, i);
+			
 		}
 	}
-	public void joinPlayer(Player player) {
+	public void teleportPlayer(String player) {
+		String location = plugin.getConfig().getString("spawn_location");
+		String[] loc = location.split("\\|");
+
+	    World world = Bukkit.getWorld(loc[0]);
+		Double x = Double.parseDouble(loc[1]);
+		Double y = Double.parseDouble(loc[2]);
+		Double z = Double.parseDouble(loc[3]);
+		 
+		final Location spawnpoint = new Location(world, x, y, z);
+		Bukkit.getPlayer(player).teleport(spawnpoint);
+
+	}
+	public void joinPlayer(String player) {
 		//arena mode on
 		boolean arena_mode = plugin.getConfig().getBoolean("arena_mode");
 		if (arena_mode){
 			if (!plugin.playersInGame.contains(player)){
-				plugin.playersInGame.add(player);
-				String location = plugin.getConfig().getString("spawn_location");
-				String[] loc = location.split("\\|");
-
-			    World world = Bukkit.getWorld(loc[0]);
-				Double x = Double.parseDouble(loc[1]);
-				Double y = Double.parseDouble(loc[2]);
-				Double z = Double.parseDouble(loc[3]);
-				 
-				final Location spawnpoint = new Location(world, x, y, z);
-				for (Player p : plugin.getServer().getOnlinePlayers()) {
-					if (p.getLocation().getWorld().getName().equalsIgnoreCase(world.getName())) {
-					p.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + plugin.playerIt + " is now in the game!");
+				
+				for (String p : plugin.playersInGame) {
+					Bukkit.getPlayer(p).sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + player + " is now in the game!");
 				}
-					player.teleport(spawnpoint);
-			}
+				teleportPlayer(player);
+				plugin.playersInGame.add(player);
+			
 			}
 			//You are already in the game
 			else {
-				player.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.RED +  "You are already in the game!");
+				Bukkit.getPlayer(player).sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.RED +  "You are already in the game!");
 			}
 		}
 		else {
-			player.sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.RED +  "Arena mode is off!");
+			Bukkit.getPlayer(player).sendMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.RED +  "Arena mode is off!");
 		}		
 	}
-
+	public void gameOff() {
+	plugin.getServer().broadcastMessage(ChatColor.WHITE + "[" + ChatColor.RED + "MCTag" + ChatColor.WHITE + "] " + ChatColor.BLUE + "The game of tag has ended!");
+    cleanUp();
+	}
+	public void cleanUp() {
+		plugin.gameOn = false;
+		plugin.playerIt = null;
+		plugin.previouslyIt = null;
+		plugin.frozenPlayers.clear();
+		plugin.playersInGame.clear();	
+	}
 }

@@ -38,16 +38,28 @@ permissions:
         
     MCTag.freezetagoff: 
         decription: Allows use of /tag freezetag off
-        defualt: OP
+        default: OP
         
     MCTag.join: 
         decription: Allows use of /tag join
-        defualt: true
+        default: true
         
     MCTag.leave: 
         decription: Allows use of /tag leave
-        defualt: true
+        default: true
         
     MCTag.setspawn: 
         decription: Allows use of /tag setspawn
-        defualt: OP
+        default: OP
+        
+    MCTag.notele.bypass:
+       description: Allows bypass of no teleporting
+       default: OP
+       
+    MCTag.nocommands.bypass:
+       description: Allows bypass of no commands
+       default: OP
+       
+    MCTag.players:
+       description: Allows use of /tag players
+       default: OP
